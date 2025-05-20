@@ -12,13 +12,30 @@
       },
       "inputSchema": {
         "type": "object",
-        "required": ["meta_model", "messages", "schema"],
+        "required": ["think", "schema", "messages", "meta_model"],
         "additionalProperties": false,
         "properties": {
-          "meta_model": {
-            "description": "Objective AI MetaModel.",
-            "type": "string",
-            "enum": ["objectiveai/pauper-1"]
+          "think": {
+            "description": "The assistant's own thoughts and plans for `schema` and `messages`. This is not sent to Objective AI.",
+            "type": "string"
+          },
+          "schema": {
+            "description": "Objective AI response schema. Objective AI response schemas are unique in that `properties` is an array, not a dictionary. The schema should only contain essential properties pertaining to the final answer. Properties which relate to confidence, explanations, reasoning or intermediate logic are unnecessary.",
+            "type": "object",
+            "required": ["type", "properties"],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["object"]
+              },
+              "properties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/schema"
+                }
+              }
+            }
           },
           "messages": {
             "description": "Objective AI query. Conforms to the OpenAI API chat message format.",
@@ -40,23 +57,10 @@
               }
             }
           },
-          "schema": {
-            "description": "Objective AI response schema. Objective AI response schemas are unique in that `properties` is an array, not a dictionary. The schema should only contain essential properties pertaining to the final answer. Properties which relate to confidence, explanations, reasoning or intermediate logic are unnecessary.",
-            "type": "object",
-            "required": ["type", "properties"],
-            "additionalProperties": false,
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": ["object"]
-              },
-              "properties": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/schema"
-                }
-              }
-            }
+          "meta_model": {
+            "description": "Objective AI MetaModel.",
+            "type": "string",
+            "enum": ["objectiveai/pauper-1"]
           }
         },
         "$defs": {
