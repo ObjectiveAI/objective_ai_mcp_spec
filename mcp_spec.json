@@ -1,8 +1,63 @@
 {
   "list_tools": [
     {
-      "name": "query_objective_ai",
-      "description": "Query Objective AI. Get a JSON response to an objective query.",
+      "name": "exa_search",
+      "description": "Perform a search query on the web, and retrieve the world's most relevant information.",
+      "annotations": {
+        "title": "Exa Web Search",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "think",
+          "query",
+          "category",
+          "startPublishedDate",
+          "endPublishedDate"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "think": {
+            "description": "The assistant's own thoughts and plans for `query`, `category`, `startPublishedDate`, and `endPublishedDate`. This is not sent to Exa.",
+            "type": "string"
+          },
+          "query": {
+            "description": "The web search query to perform.",
+            "type": "string"
+          },
+          "category": {
+            "description": "Optional. Category of the search. Helps to refine search results.",
+            "type": ["string", "null"],
+            "enum": [
+              "company",
+              "research paper",
+              "news",
+              "pdf",
+              "github",
+              "tweet",
+              "personal site",
+              "linkedin profile",
+              "financial report"
+            ]
+          },
+          "startPublishedDate": {
+            "description": "Optional. Start date for the search. Only results published after this date will be returned. ISO 8601 format.",
+            "type": ["string", "null"]
+          },
+          "endPublishedDate": {
+            "description": "Optional. End date for the search. Only results published before this date will be returned. ISO 8601 format.",
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+    {
+      "name": "objective_ai_query",
+      "description": "Perform an Objective AI query. Get a JSON response to an objective query.",
       "annotations": {
         "title": "Query Objective AI",
         "readOnlyHint": true,
@@ -12,7 +67,7 @@
       },
       "inputSchema": {
         "type": "object",
-        "required": ["think", "schema", "messages", "meta_model"],
+        "required": ["think", "schema", "messages", "metaModel"],
         "additionalProperties": false,
         "properties": {
           "think": {
@@ -57,7 +112,7 @@
               }
             }
           },
-          "meta_model": {
+          "metaModel": {
             "description": "Objective AI MetaModel.",
             "type": "string",
             "enum": ["objectiveai/pauper-1"]
